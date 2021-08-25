@@ -21,7 +21,7 @@ namespace MarsRobots.Entities
         /// <summary>
         /// Cardinal direction.
         /// </summary>
-        public CardinalDirection direction { get; set; }
+        public CardinalDirection Direction { get; set; }
 
         /// <summary>
         /// Default contructor.
@@ -29,7 +29,7 @@ namespace MarsRobots.Entities
         public Position()
         {
             this.X = this.Y = 0;
-            this.direction = CardinalDirection.N;
+            this.Direction = CardinalDirection.N;
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace MarsRobots.Entities
         {
             this.X = x;
             this.Y = y;
-            this.direction = direction;
+            this.Direction = direction;
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace MarsRobots.Entities
         /// <returns></returns>
         public Position Copy()
         {
-            return new Position(this.X, this.Y, this.direction);
+            return new Position(this.X, this.Y, this.Direction);
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace MarsRobots.Entities
         /// <param name="pos"></param>
         public void Left()
         {
-            this.direction = this.direction.Left();
+            this.Direction = this.Direction.Left();
         }
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace MarsRobots.Entities
         /// <param name="pos"></param>
         public void Right()
         {
-            this.direction = this.direction.Right();
+            this.Direction = this.Direction.Right();
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace MarsRobots.Entities
             bool res = false;
             try
             {
-                switch (this.direction)
+                switch (this.Direction)
                 {
                     case CardinalDirection.N:
                         this.Y++;

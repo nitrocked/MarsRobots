@@ -40,11 +40,11 @@ namespace MarsRobots
                 Console.WriteLine("Enter Robot Instructions String (L, R, F) :");
                 string instructionsString = Console.ReadLine();
 
-                Robot robot = manager.CreateRobot(configRobot.X, configRobot.Y, configRobot.direction, new System.Collections.Generic.List<string>() { instructionsString });
+                Robot robot = manager.CreateRobot(configRobot.X, configRobot.Y, configRobot.Direction, new System.Collections.Generic.List<string>() { instructionsString });
                 robot.SetMap(map);
                 manager.RunRobot(robot);
                 
-                Console.WriteLine($"OUTPUT {robot.CurrentPosition.X} {robot.CurrentPosition.Y} {robot.CurrentPosition.direction.ToString()} {(robot.isLost ? "LOST" : string.Empty)}");
+                Console.WriteLine($"OUTPUT {robot.CurrentPosition.X} {robot.CurrentPosition.Y} {robot.CurrentPosition.Direction.ToString()} {(robot.IsLost ? "LOST" : string.Empty)}");
                 DrawMap(robot.CurrentMap);
 
             } while (!exit);
@@ -133,7 +133,7 @@ namespace MarsRobots
                         PositionInfo info = map.GetPositionInfo(curPos);
                         string mes = info.LostRobots ? " [X]" : info.Explored ? " [·]" : " [ ]";
                         if (x == 0)
-                            mes = $"{y.ToString("00")}    {mes}";
+                            mes = $"{y.ToString("00")}   {mes}";
                         line += mes;
                     }
                     lines.Add(line);

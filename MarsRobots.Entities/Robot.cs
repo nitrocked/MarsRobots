@@ -31,7 +31,7 @@ namespace MarsRobots.Entities
         /// <summary>
         /// Flag indicating the robot is lost: out of map bounds.
         /// </summary>
-        public bool isLost { get; set; }
+        public bool IsLost { get; set; }
 
         /// <summary>
         /// Set of instructions strings for the robot.
@@ -96,7 +96,7 @@ namespace MarsRobots.Entities
         public bool ResetRobot()
         {
             this.CurrentPosition = this.InitialPosition.Copy();
-            this.isLost = false;
+            this.IsLost = false;
             this.Tracking = new List<Position>();
             return true;
         }
@@ -112,7 +112,7 @@ namespace MarsRobots.Entities
             bool res = false;
             try
             {
-                if (this.InitialPosition != null && this.CurrentPosition != null && !this.isLost)
+                if (this.InitialPosition != null && this.CurrentPosition != null && !this.IsLost)
                 {
                     switch (action)
                     {
@@ -135,7 +135,7 @@ namespace MarsRobots.Entities
                             {
                                 this.CurrentMap.GetPositionInfo(this.CurrentPosition).Explored = true;
                                 this.CurrentMap.GetPositionInfo(this.CurrentPosition).LostRobots = true;
-                                this.isLost = true;
+                                this.IsLost = true;
                                 throw new LostRobotException(this.CurrentPosition.Copy());
                             }
                             break;

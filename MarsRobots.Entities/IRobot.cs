@@ -8,7 +8,7 @@ namespace MarsRobots.Entities
         int Id { get; set; }
         Position InitialPosition { get; }
         List<string> InstructionStrings { get; set; }
-        bool isLost { get; set; }
+        bool IsLost { get; set; }
         string Name { get; set; }
     }
 }

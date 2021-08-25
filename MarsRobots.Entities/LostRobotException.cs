@@ -12,7 +12,7 @@ namespace MarsRobots.Entities
     {
         private Position lastKnownPosition = null;
 
-        public override string Message => $"Lost Robot - Last known position (x: {lastKnownPosition.X}, y: {lastKnownPosition.Y}, Dir: {lastKnownPosition.direction})";
+        public override string Message => $"Lost Robot - Last known position (x: {lastKnownPosition.X}, y: {lastKnownPosition.Y}, Dir: {lastKnownPosition.Direction})";
 
         public LostRobotException(Position lastKnownPosition)
         {
