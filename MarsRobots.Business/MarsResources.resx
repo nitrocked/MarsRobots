@@ -118,7 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BL_Error_MapCoordinatesBounds" xml:space="preserve">
-    <value>The size of map doesn´t fit into the allowed values. [1-{0}]</value>
+    <value>The value of coordinate doesn´t match the allowed values for a map [0-{0}]</value>
+  </data>
+  <data name="BL_Ex_MaxInstructionStringLenght" xml:space="preserve">
+    <value>The lenght of the string can not be longer than {0}.</value>
   </data>
   <data name="BL_Ex_MessageHeader" xml:space="preserve">
     <value>Robot Lost Excepction - </value>

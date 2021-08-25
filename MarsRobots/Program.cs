@@ -12,6 +12,7 @@ namespace MarsRobots
         static void Main(string[] args)
         {
             bool exit = false;
+            string userInput = string.Empty;
             Console.WriteLine("Hello Mars!");
             Console.WriteLine("");
             Console.WriteLine("");
@@ -19,11 +20,14 @@ namespace MarsRobots
 
             // CONFIG MAP
             Console.WriteLine("Enter Map Config Bound Params: X Y [Name]");
-            Position configMap = ReadMapConfig(Console.ReadLine());
+            userInput = Console.ReadLine();
+            Position configMap = manager.ReadMapConfig(userInput);
+
             while (configMap == null)
             {
                 Console.WriteLine(" ## Invalid map config string. Try again!");
-                configMap = ReadMapConfig(Console.ReadLine());
+                userInput = Console.ReadLine();
+                configMap = manager.ReadMapConfig(userInput);
             }
             MarsMap map = manager.CreateNewMap(configMap.X, configMap.Y);
 
@@ -31,85 +35,43 @@ namespace MarsRobots
             {
                 // CONFIG ROBOT
                 Console.WriteLine("Enter Robot Config Params: X Y Orientation [Name]");
-                Position configRobot = ReadRobotConfig(Console.ReadLine());
+                userInput = Console.ReadLine();
+                if (RequestExit(userInput)) 
+                    return;
+                Position configRobot = manager.ReadRobotConfig(userInput);
+
                 while (configRobot == null)
                 {
                     Console.WriteLine(" ## Invalid Robot config string. Try again!");
-                    configRobot = ReadRobotConfig(Console.ReadLine());
+                    userInput = Console.ReadLine();
+                    if (RequestExit(userInput)) 
+                        return;
+                    configRobot = manager.ReadRobotConfig(userInput);
                 }
                 Console.WriteLine("Enter Robot Instructions String (L, R, F) :");
-                string instructionsString = Console.ReadLine();
+                userInput = Console.ReadLine();
+                if (RequestExit(userInput)) 
+                    return;
 
-                Robot robot = manager.CreateRobot(configRobot.X, configRobot.Y, configRobot.Direction, new System.Collections.Generic.List<string>() { instructionsString });
-                robot.SetMap(map);
-                manager.RunRobot(robot);
-                
-                Console.WriteLine($"OUTPUT {robot.CurrentPosition.X} {robot.CurrentPosition.Y} {robot.CurrentPosition.Direction.ToString()} {(robot.IsLost ? "LOST" : string.Empty)}");
-                DrawMap(robot.CurrentMap);
+                try
+                {
+                    Robot robot = manager.CreateRobot(configRobot.X, configRobot.Y, configRobot.Direction, new System.Collections.Generic.List<string>() { userInput });
+                    
+                    robot.SetMap(map);
+                    manager.RunRobot(robot);
 
+                    Console.WriteLine($"OUTPUT {robot.CurrentPosition.X} {robot.CurrentPosition.Y} {robot.CurrentPosition.Direction.ToString()} {(robot.IsLost ? "LOST" : string.Empty)}");
+                    DrawMap(robot.CurrentMap);
+                }
+                catch(LostRobotException lrex)
+                {
+                    Console.WriteLine(lrex.Message);
+                }
+                catch(Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
             } while (!exit);
-        }
-
-        private static Position ReadMapConfig(string inputLine)
-        {
-            int x = 0;
-            int y = 0;
-            bool res = false;
-            try
-            {
-                if (!string.IsNullOrEmpty(inputLine))
-                {
-                    List<string> values = inputLine.TrimStart().TrimEnd().ToUpper().Split(" ").ToList();
-                    if (values != null && values.Count == 2)
-                    {
-                        x = int.Parse(values[0]);
-                        y = int.Parse(values[1]);
-                        res = true;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                //Invalid cast to int or other issues.
-                res = false;
-            }
-
-            if (res)
-                return new Position(x, y, CardinalDirection.N);
-            else
-                return null;
-        }
-
-        private static Position ReadRobotConfig(string inputLine)
-        {
-            int x = -1;
-            int y = -1;
-            CardinalDirection dir = CardinalDirection.N;
-            bool readOk = false;
-            try
-            {
-                if (!string.IsNullOrEmpty(inputLine))
-                {
-                    List<string> values = inputLine.TrimStart().TrimEnd().ToUpper().Split(" ").ToList();
-                    if (values != null && values.Count == 3)
-                    {
-                        x = int.Parse(values[0]);
-                        y = int.Parse(values[1]);
-                        dir = Enum.Parse<CardinalDirection>(values[2].ToString());
-                        readOk = true;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                //Invalid cast to int or other issues.
-                readOk = false;
-            }
-
-            if (readOk)
-                return new Position(x, y, dir);
-            else
-                return null;
         }
 
         /// <summary>
@@ -131,20 +93,30 @@ namespace MarsRobots
                             axisX += String.Format($" {x.ToString("00")} ");
                         Position curPos = new Position(x, y, CardinalDirection.N);
                         PositionInfo info = map.GetPositionInfo(curPos);
-                        string mes = info.LostRobots ? " [X]" : info.Explored ? " [·]" : " [ ]";
+                        string mes = info.ForbiddenDirections.Count() > 0 ? " [X]" : info.Explored ? " [·]" : " [ ]";
                         if (x == 0)
                             mes = $"{y.ToString("00")}   {mes}";
                         line += mes;
                     }
                     lines.Add(line);
                 }
-                
+
                 //Invert Draw .
                 lines.Reverse();
                 lines.Add(axisX);
 
                 lines.ForEach(l => Console.WriteLine(l));
             }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="inputLine"></param>
+        /// <returns></returns>
+        private static bool RequestExit(string inputLine)
+        {
+            return !string.IsNullOrEmpty(inputLine) && inputLine.ToUpper().Contains("Q");
         }
     }
 }

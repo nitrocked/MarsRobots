@@ -61,11 +61,20 @@ namespace MarsRobots.Business {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The size of map doesn´t fit into the allowed values. [1-{0}].
+        ///   Looks up a localized string similar to The value of coordinate doesn´t match the allowed values for a map [0-{0}].
         /// </summary>
         public static string BL_Error_MapCoordinatesBounds {
             get {
                 return ResourceManager.GetString("BL_Error_MapCoordinatesBounds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The lenght of the string can not be longer than {0}..
+        /// </summary>
+        public static string BL_Ex_MaxInstructionStringLenght {
+            get {
+                return ResourceManager.GetString("BL_Ex_MaxInstructionStringLenght", resourceCulture);
             }
         }
         

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
+using MarsRobots.Entities.Enums;
 
 namespace MarsRobots.Entities
 {
@@ -30,16 +31,16 @@ namespace MarsRobots.Entities
         public int SizeY { get; private set; }
 
         /// <summary>
-        /// Constructor.
+        /// Constructor. Zero based.
         /// </summary>
-        /// <param name="sizeX"></param>
-        /// <param name="sizeY"></param>
+        /// <param name="maxX"></param>
+        /// <param name="maxY"></param>
         /// <param name="name"></param>
-        public MarsMap(int sizeX, int sizeY, string name = "")
+        public MarsMap(int maxX, int maxY, string name = "")
         {
-            this.SizeX = sizeX;
-            this.SizeY = sizeY;
-            mapGrid = new PositionInfo[sizeX, sizeY];
+            this.SizeX = maxX + 1;
+            this.SizeY = maxY + 1;
+            mapGrid = new PositionInfo[this.SizeX, this.SizeY];
         }
 
         /// <summary>
@@ -55,11 +56,11 @@ namespace MarsRobots.Entities
                 if (this.IsPointInsideMap(pos))
                 {
                     if (this.mapGrid[pos.X, pos.Y] == null)
-                        this.mapGrid[pos.X, pos.Y] = new PositionInfo();
+                        this.mapGrid[pos.X, pos.Y] = new PositionInfo(pos);
                     posInfo = this.mapGrid[pos.X, pos.Y];
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
             }

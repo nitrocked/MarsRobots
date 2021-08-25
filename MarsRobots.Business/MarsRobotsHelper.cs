@@ -13,7 +13,8 @@ namespace MarsRobots.Business
 {
     public class MarsRobotsHelper
     {
-        private int maxCoordinate = 50;
+        private int maxCoordinateX = 50;
+        private int maxCoordinateY = 50;
         private int maxInstructionsSrtings = 1;
         private int maxIntructionStringLenght = 100;
         private string databaseFileName = "marsDB.db";
@@ -44,8 +45,9 @@ namespace MarsRobots.Business
         /// <returns></returns>
         public MarsMap CreateNewMap(int x, int y)
         {
-            if (x < 1 || y < 1 || x > maxCoordinate || y > maxCoordinate) throw new ArgumentException(String.Format(MarsResources.BL_Error_MapCoordinatesBounds, maxCoordinate));
-
+            if (x < 0 || x > maxCoordinateX) throw new ArgumentOutOfRangeException("x", String.Format(MarsResources.BL_Error_MapCoordinatesBounds, maxCoordinateX));
+            if (y < 0 || y > maxCoordinateY) throw new ArgumentOutOfRangeException("y", String.Format(MarsResources.BL_Error_MapCoordinatesBounds, maxCoordinateY));
+          
             MarsMap newMap = null;
 
             try
@@ -77,7 +79,9 @@ namespace MarsRobots.Business
         /// <returns></returns>
         public Robot CreateRobot(int initX, int initY, CardinalDirection direction, List<string> instructionsStrings, string name = "")
         {
-            if (instructionsStrings.Count > maxInstructionsSrtings) throw new ArgumentOutOfRangeException("instructionsStrings");
+            if (initX < 0 || initX > maxCoordinateX) throw new ArgumentOutOfRangeException("initX", String.Format(MarsResources.BL_Error_MapCoordinatesBounds, maxCoordinateX));
+            if (initY < 0 || initY > maxCoordinateY) throw new ArgumentOutOfRangeException("initY", String.Format(MarsResources.BL_Error_MapCoordinatesBounds, maxCoordinateY));
+            if (instructionsStrings.Count > maxInstructionsSrtings) throw new ArgumentOutOfRangeException("instructionsStrings", String.Format(MarsResources.BL_Ex_MaxInstructionStringLenght, maxIntructionStringLenght));
 
             Robot newRobot = null;
 
@@ -109,12 +113,7 @@ namespace MarsRobots.Business
                 {
                     foreach (string instructionString in robot.InstructionStrings)
                     {
-                        List<RobotAction> actions = this.InputStringToActionList(instructionString);
-                        foreach (RobotAction action in actions)
-                        {
-                            robot.Execute(action);
-                        }
-                        //actions.ForEach(a => robot.Execute(a));
+                        this.InputStringToActionList(instructionString).ForEach(a => robot.Execute(a));
                     }
                     res = true;
                 }
@@ -136,6 +135,80 @@ namespace MarsRobots.Business
             }
 
             return res;
+        }
+
+        /// <summary>
+        /// Transform string to position.
+        /// Format: <X> <Y>
+        /// </summary>
+        /// <param name="inputLine"></param>
+        /// <returns></returns>
+        public Position ReadMapConfig(string inputLine)
+        {
+            int x = 0;
+            int y = 0;
+            bool res = false;
+            try
+            {
+                if (!string.IsNullOrEmpty(inputLine))
+                {
+                    List<string> values = inputLine.TrimStart().TrimEnd().ToUpper().Split(" ").ToList();
+                    if (values != null && values.Count == 2)
+                    {
+                        x = int.Parse(values[0]);
+                        y = int.Parse(values[1]);
+                        res = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                //Invalid cast to int or other issues.
+                res = false;
+            }
+
+            if (res)
+                return new Position(x, y, CardinalDirection.N);
+            else
+                return null;
+        }
+
+        /// <summary>
+        /// Transform string into initial roboto position config.
+        /// Formar: <initialX> <initialY> <[N, S, E, W]>
+        /// </summary>
+        /// <param name="inputLine"></param>
+        /// <returns></returns>
+        public Position ReadRobotConfig(string inputLine)
+        {
+            int x = -1;
+            int y = -1;
+            CardinalDirection dir = CardinalDirection.N;
+            bool readOk = false;
+            try
+            {
+                if (!string.IsNullOrEmpty(inputLine))
+                {
+                    List<string> values = inputLine.TrimStart().TrimEnd().ToUpper().Split(" ").ToList();
+                    if (values != null && values.Count == 3)
+                    {
+                        x = int.Parse(values[0]);
+                        y = int.Parse(values[1]);
+                        dir = Enum.Parse<CardinalDirection>(values[2].ToString());
+                        readOk = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                //Invalid cast to int or other issues.
+                readOk = false;
+            }
+
+            if (readOk)
+                return new Position(x, y, dir);
+            else
+                return null;
         }
 
         /// <summary>

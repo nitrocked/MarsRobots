@@ -1,26 +1,64 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using MarsRobots.Entities.Enums;
 
 namespace MarsRobots.Entities
 {
+    /// <summary>
+    /// It doesn´t inherit from Position as Direction has no sense here.
+    /// </summary>
     public class PositionInfo
     {
         /// <summary>
-        /// Indicates this point has been explored by a robot.
+        /// X Coordinate
         /// </summary>
-        public bool Explored { get; set; }
+        public int X { get; private set; }
 
         /// <summary>
-        /// inidicates some robot has been lost from this position.
+        /// Y Coordinate
         /// </summary>
-        public bool LostRobots { get; set; }
+        public int Y { get; private set; }
 
-        //Default constructor.
-        public PositionInfo()
+        /// <summary>
+        /// Indicates this point has been explored by a robot.
+        /// </summary>
+        public bool Explored { get; private set; }
+
+        /// <summary>
+        /// Robot positions that have been lost in this point.
+        /// </summary>
+        public List<CardinalDirection> ForbiddenDirections { get; set; }
+
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        /// <param name="pos"></param>
+        public PositionInfo(Position pos)
         {
-            this.Explored = this.LostRobots = false;
+            this.Explored = false;
+            this.ForbiddenDirections = new List<CardinalDirection>();
+            this.X = pos.X;
+            this.Y = pos.Y;
         }
 
+        /// <summary>
+        /// Adds a forbidden direction from this point.
+        /// </summary>
+        /// <param name="direction"></param>
+        public void AddForbiddenDirection(CardinalDirection direction)
+        {
+            if (!this.ForbiddenDirections.Contains(direction))
+                this.ForbiddenDirections.Add(direction);
+        }
+
+        /// <summary>
+        /// Set the current position as explored. 
+        /// Used by private setter for future more complex logic.
+        /// </summary>
+        public void SetExplored()
+        {
+            this.Explored = true;
+        }
     }
 }

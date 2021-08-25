@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.CompilerServices;
+using System.Linq;
 
 namespace MarsRobots.Entities
 {
@@ -125,18 +126,22 @@ namespace MarsRobots.Entities
                             this.Tracking.Add(this.CurrentPosition.Copy());
                             break;
                         case RobotAction.Forward:
-                            if (this.CheckForwardIsInsideMap())
+                            this.CurrentMap.GetPositionInfo(this.CurrentPosition).SetExplored();
+
+                            if (!this.HasLostRobotsTowardsCurrentDirection())
                             {
-                                this.CurrentMap.GetPositionInfo(this.CurrentPosition).Explored = true;
-                                this.CurrentPosition.Forward();
-                                this.Tracking.Add(this.CurrentPosition.Copy());
-                            }
-                            else
-                            {
-                                this.CurrentMap.GetPositionInfo(this.CurrentPosition).Explored = true;
-                                this.CurrentMap.GetPositionInfo(this.CurrentPosition).LostRobots = true;
-                                this.IsLost = true;
-                                throw new LostRobotException(this.CurrentPosition.Copy());
+                                if (this.IsForwardInsideMap())
+                                {
+                                    this.CurrentPosition.Forward();
+                                    this.Tracking.Add(this.CurrentPosition.Copy());
+                                }
+                                else
+                                {
+                                    this.CurrentMap.GetPositionInfo(this.CurrentPosition).AddForbiddenDirection(CurrentPosition.Direction);
+                                    //this.CurrentMap.SetFence(this.CurrentPosition.Direction);
+                                    this.IsLost = true;
+                                    throw new LostRobotException(this.CurrentPosition.Copy());
+                                }
                             }
                             break;
                         default:
@@ -158,7 +163,7 @@ namespace MarsRobots.Entities
         /// Checks if the next position in map to go forward is inside map bounds.
         /// </summary>
         /// <returns></returns>
-        private bool CheckForwardIsInsideMap()
+        private bool IsForwardInsideMap()
         {
             try
             {
@@ -167,14 +172,35 @@ namespace MarsRobots.Entities
                     Position aux = this.CurrentPosition.Copy();
 
                     aux.Forward();
+
                     return this.CurrentMap.IsPointInsideMap(aux);
                 }
             }
-            catch(IndexOutOfRangeException orex)
+            catch (IndexOutOfRangeException orex)
             {
                 return false;
             }
-            catch(Exception ex)
+            catch (Exception ex)
+            {
+                return false;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Checks if the next grid point forward movement were lost robots.
+        /// </summary>
+        /// <returns></returns>
+        private bool HasLostRobotsTowardsCurrentDirection()
+        {
+            try
+            {
+                if (this.CurrentMap != null && this.CurrentPosition != null)
+                {
+                    return this.CurrentMap.GetPositionInfo(this.CurrentPosition).ForbiddenDirections.Count(d => d == this.CurrentPosition.Direction) > 0;
+                }
+            }
+            catch (Exception ex)
             {
                 return false;
             }
