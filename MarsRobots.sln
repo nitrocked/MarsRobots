@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarsRobots.Entities", "Mars
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarsRobots.Persistence", "MarsRobots.Persistence\MarsRobots.Persistence.csproj", "{5835F636-33ED-478A-89FA-D04C40132627}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarsRobots.REST", "MarsRobots.REST\MarsRobots.REST.csproj", "{7A6982DA-FF1C-4D96-ACA7-6F0B92D23088}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarsRobots.REST", "MarsRobots.REST\MarsRobots.REST.csproj", "{7A6982DA-FF1C-4D96-ACA7-6F0B92D23088}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarsRobots.UnitTest", "MarsRobots.UnitTest\MarsRobots.UnitTest.csproj", "{7DDC8067-E883-47DE-AF7A-BCFD8ECAD190}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{7A6982DA-FF1C-4D96-ACA7-6F0B92D23088}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7A6982DA-FF1C-4D96-ACA7-6F0B92D23088}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A6982DA-FF1C-4D96-ACA7-6F0B92D23088}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7DDC8067-E883-47DE-AF7A-BCFD8ECAD190}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DDC8067-E883-47DE-AF7A-BCFD8ECAD190}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DDC8067-E883-47DE-AF7A-BCFD8ECAD190}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DDC8067-E883-47DE-AF7A-BCFD8ECAD190}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
