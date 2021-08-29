@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using MarsRobots.Entities;
+using MarsRobots.Entities.Enums;
 
 namespace MarsRobots.Business.Tests
 {
@@ -21,8 +22,8 @@ namespace MarsRobots.Business.Tests
 
             MarsMap refMap = new MarsMap(testX, testY);
 
-            MarsRobotsHelper manager = new MarsRobotsHelper();
-            MarsMap tstMap = manager.CreateNewMap(testX, testY);
+            MarsRobotsBusiness manager = new MarsRobotsBusiness();
+            MarsMap tstMap = manager.CreateMap(testX, testY);
 
             Assert.IsNotNull(tstMap);
             Assert.IsTrue(refMap.SizeX == tstMap.SizeX);
@@ -40,8 +41,8 @@ namespace MarsRobots.Business.Tests
 
             MarsMap refMap = new MarsMap(testX, testY);
 
-            MarsRobotsHelper manager = new MarsRobotsHelper();
-            MarsMap tstMap = manager.CreateNewMap(testX, testY);
+            MarsRobotsBusiness manager = new MarsRobotsBusiness();
+            MarsMap tstMap = manager.CreateMap(testX, testY);
 
             Assert.IsNotNull(tstMap);
             Assert.IsTrue(refMap.SizeX == tstMap.SizeX);
@@ -59,15 +60,23 @@ namespace MarsRobots.Business.Tests
             int testY = 51;
 
             MarsMap refMap = new MarsMap(testX, testY);
-            MarsRobotsHelper manager = new MarsRobotsHelper();
+            MarsRobotsBusiness manager = new MarsRobotsBusiness();
 
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() => manager.CreateNewMap(testX, testY));
+            Assert.ThrowsException<ArgumentOutOfRangeException>(() => manager.CreateMap(testX, testY));
         }
 
         [TestMethod()]
         public void CreateRobotTest()
         {
-            Assert.Fail();
+            int testX = 0;
+            int testY = 0;
+            CardinalDirection dir = CardinalDirection.S;
+            string actions = "FFFFFFFFFF";
+            MarsRobotsBusiness manager = new MarsRobotsBusiness();
+            Robot r1 = manager.CreateRobot(testX, testY, dir, new List<string>() { actions });
+            Robot r2 = manager.GetRobot(r1.Id);
+
+            Assert.AreEqual(r1, r2);
         }
 
         [TestMethod()]

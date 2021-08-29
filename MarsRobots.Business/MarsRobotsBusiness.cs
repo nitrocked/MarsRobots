@@ -11,24 +11,30 @@ using System.Text;
 
 namespace MarsRobots.Business
 {
-    public class MarsRobotsHelper
+    public class MarsRobotsBusiness
     {
         private int maxCoordinateX = 50;
         private int maxCoordinateY = 50;
         private int maxInstructionsSrtings = 1;
         private int maxIntructionStringLenght = 100;
-        private string databaseFileName = "marsDB.db";
+        private string dbConnectionString = @"Filename=marsDB.db;Connection=shared";
 
         MarsPersistence persistence;
 
         private List<MarsMap> maps = new List<MarsMap>();
         private List<Robot> robots = new List<Robot>();
 
-        public MarsRobotsHelper()
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        public MarsRobotsBusiness(string connectionString = "")
         {
             try
             {
-                persistence = new MarsPersistence(databaseFileName);
+                if (!string.IsNullOrEmpty(connectionString))
+                    this.dbConnectionString = connectionString;
+
+                persistence = new MarsPersistence(this.dbConnectionString);
 
             }
             catch (Exception ex)
@@ -38,16 +44,35 @@ namespace MarsRobots.Business
         }
 
         /// <summary>
+        /// Gets all maps.
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<MarsMap> GetMarsMaps()
+        {
+            return this.persistence.GetMaps();
+        }
+        
+        /// <summary>
+        /// Get a map by its id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public MarsMap GetMarsMap(int id)
+        {
+            return persistence.GetMap(new BsonValue(id));
+        }
+
+        /// <summary>
         /// Creates a new map and persist it to DB.
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        public MarsMap CreateNewMap(int x, int y)
+        public MarsMap CreateMap(int x, int y)
         {
             if (x < 0 || x > maxCoordinateX) throw new ArgumentOutOfRangeException("x", String.Format(MarsResources.BL_Error_MapCoordinatesBounds, maxCoordinateX));
             if (y < 0 || y > maxCoordinateY) throw new ArgumentOutOfRangeException("y", String.Format(MarsResources.BL_Error_MapCoordinatesBounds, maxCoordinateY));
-          
+
             MarsMap newMap = null;
 
             try
@@ -57,8 +82,8 @@ namespace MarsRobots.Business
 
                 newMap = new MarsMap(x, y);
 
-                if (persistence.InsertMap(newMap))
-                    maps.Add(newMap);
+                persistence.InsertMap(newMap);
+                maps.Add(newMap);
             }
             catch (Exception ex)
             {
@@ -71,13 +96,58 @@ namespace MarsRobots.Business
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="map"></param>
+        public void InsertMap(MarsMap map)
+        {
+            persistence.InsertMap(map);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="map"></param>
+        public void UpdateMap(MarsMap map)
+        {
+            persistence.UpdateMap(map);
+        }
+
+        /// <summary>
+        /// Delete by id of map.
+        /// </summary>
+        /// <param name="id"></param>
+        public void DeleteMap(int id)
+        {
+            persistence.DeleteMap(id);
+        }
+
+        /// <summary>
+        /// Get the list of all robots.
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<Robot> GetRobots()
+        {
+            return this.persistence.GetRobots();
+        }
+
+        /// <summary>
+        /// Get a robot by id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public Robot GetRobot(int id)
+        {
+            return this.persistence.GetRobot(new BsonValue(id));
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="initX"></param>
         /// <param name="initY"></param>
         /// <param name="direction"></param>
         /// <param name="instructionsStrings"></param>
-        /// <param name="name"></param>
         /// <returns></returns>
-        public Robot CreateRobot(int initX, int initY, CardinalDirection direction, List<string> instructionsStrings, string name = "")
+        public Robot CreateRobot(int initX, int initY, CardinalDirection direction, List<string> instructionsStrings)
         {
             if (initX < 0 || initX > maxCoordinateX) throw new ArgumentOutOfRangeException("initX", String.Format(MarsResources.BL_Error_MapCoordinatesBounds, maxCoordinateX));
             if (initY < 0 || initY > maxCoordinateY) throw new ArgumentOutOfRangeException("initY", String.Format(MarsResources.BL_Error_MapCoordinatesBounds, maxCoordinateY));
@@ -87,8 +157,8 @@ namespace MarsRobots.Business
 
             try
             {
-                newRobot = new Robot(initX, initY, direction, instructionsStrings, name);
-                persistence.InsertRobot(newRobot);
+                newRobot = new Robot(initX, initY, direction, instructionsStrings);
+                newRobot.Id = persistence.InsertRobot(newRobot);
             }
             catch (Exception ex)
             {
@@ -96,6 +166,33 @@ namespace MarsRobots.Business
             }
 
             return newRobot;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="robot"></param>
+        public void InsertRobot(Robot robot)
+        {
+            persistence.InsertRobot(robot);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="robot"></param>
+        public void UpdateRobot(Robot robot)
+        {
+            persistence.UpdateRobot(robot);
+        }
+
+        /// <summary>
+        /// Delete by id of robot.
+        /// </summary>
+        /// <param name="id"></param>
+        public void DeleteRobot(int id)
+        {
+            persistence.DeleteRobot(id);
         }
 
         /// <summary>

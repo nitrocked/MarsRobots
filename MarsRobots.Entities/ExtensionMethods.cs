@@ -17,7 +17,7 @@ namespace MarsRobots.Entities
         /// <typeparam name="CardinalDirection"></typeparam>
         /// <param name="src"></param>
         /// <returns></returns>
-        public static CardinalDirection Right<CardinalDirection>(this CardinalDirection src)
+        public static CardinalDirection Right<CardinalDirection>(this CardinalDirection src) where CardinalDirection : struct
         {
             CardinalDirection[] Arr = (CardinalDirection[])Enum.GetValues(src.GetType());
             int j = Array.IndexOf<CardinalDirection>(Arr, src) + 1;

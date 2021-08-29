@@ -13,25 +13,31 @@ namespace MarsRobots.Entities
         /// <summary>
         /// X Coordinate
         /// </summary>
-        public int X { get; private set; }
+        public int X { get; set; }
 
         /// <summary>
         /// Y Coordinate
         /// </summary>
-        public int Y { get; private set; }
+        public int Y { get; set; }
 
         /// <summary>
         /// Indicates this point has been explored by a robot.
         /// </summary>
-        public bool Explored { get; private set; }
+        public bool Explored { get; set; }
 
         /// <summary>
         /// Robot positions that have been lost in this point.
         /// </summary>
         public List<CardinalDirection> ForbiddenDirections { get; set; }
 
+        public PositionInfo()
+        {
+            this.Explored = false;
+            this.ForbiddenDirections = new List<CardinalDirection>();
+        }
+
         /// <summary>
-        /// Default constructor.
+        /// Constructor.
         /// </summary>
         /// <param name="pos"></param>
         public PositionInfo(Position pos)

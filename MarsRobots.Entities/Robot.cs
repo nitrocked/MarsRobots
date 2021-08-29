@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace MarsRobots.Entities
 {
-    public class Robot : IRobot
+    public class Robot
     {
         /// <summary>
         /// Unique Identifier for the robot.
@@ -15,14 +15,9 @@ namespace MarsRobots.Entities
         public int Id { get; set; }
 
         /// <summary>
-        /// Name of robot.
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
         /// Initial position of the robot in map.
         /// </summary>
-        public Position InitialPosition { get; private set; }
+        public Position InitialPosition { get; set; }
 
         /// <summary>
         /// Current position of the robor in the map.
@@ -42,21 +37,19 @@ namespace MarsRobots.Entities
         /// <summary>
         /// 
         /// </summary>
-        public MarsMap CurrentMap { get; private set; }
+        public MarsMap CurrentMap { get; set; }
 
         /// <summary>
         /// Logs all executed action of robot from initial moment or last reset.
         /// </summary>
         public List<Position> Tracking { get; set; }
 
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
         public Robot()
         {
+            // initially, current position is the initial position.
             this.InitialPosition = new Position();
             this.CurrentPosition = this.InitialPosition.Copy();
-            this.CurrentMap = null;
+            this.InstructionStrings = new List<string>();
             this.Tracking = new List<Position>();
         }
 
@@ -68,13 +61,12 @@ namespace MarsRobots.Entities
         /// <param name="direction"></param>
         /// <param name="instructionsStrings">List of instructions strings</param>
         /// <param name="name">Optional. Name of Robot.</param>
-        public Robot(int initX, int initY, CardinalDirection direction, List<string> instructionsStrings, string name = "")
+        public Robot(int initX, int initY, CardinalDirection direction, List<string> instructionsStrings)
         {
             // initially, current position is the initial position.
             this.InitialPosition = new Position(initX, initY, direction);
             this.CurrentPosition = this.InitialPosition.Copy();
             this.InstructionStrings = instructionsStrings;
-            this.Name = name;
             this.Tracking = new List<Position>();
         }
 

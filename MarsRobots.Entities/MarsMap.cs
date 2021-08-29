@@ -4,12 +4,21 @@ using System.Collections.Generic;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using MarsRobots.Entities.Enums;
+using System.Linq;
+using System.Text.Json.Serialization;
 
 namespace MarsRobots.Entities
 {
     public class MarsMap
     {
-        PositionInfo[,] mapGrid;
+        public PositionInfo[,] grid { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// 
+
+        //public Dictionary<int, Dictionary<int, PositionInfo>> mapGrid { get; set; }
 
         /// <summary>
         /// Id of the map.
@@ -17,18 +26,20 @@ namespace MarsRobots.Entities
         public int Id { get; set; }
 
         /// <summary>
-        /// Map name.
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
         /// X size of map.
         /// </summary>
-        public int SizeX { get; private set; }
+        public int SizeX { get; set; }
+
         /// <summary>
         /// Y size of map.
         /// </summary>
-        public int SizeY { get; private set; }
+        public int SizeY { get; set; }
+
+        public MarsMap()
+        {
+            //mapGrid = new Dictionary<int, Dictionary<int, PositionInfo>>();
+            grid = new PositionInfo[,] { };
+        }
 
         /// <summary>
         /// Constructor. Zero based.
@@ -36,11 +47,12 @@ namespace MarsRobots.Entities
         /// <param name="maxX"></param>
         /// <param name="maxY"></param>
         /// <param name="name"></param>
-        public MarsMap(int maxX, int maxY, string name = "")
+        public MarsMap(int maxX, int maxY)
         {
             this.SizeX = maxX + 1;
             this.SizeY = maxY + 1;
-            mapGrid = new PositionInfo[this.SizeX, this.SizeY];
+            //mapGrid = new Dictionary<int, Dictionary<int, PositionInfo>>();
+            grid = new PositionInfo[SizeX, SizeY];
         }
 
         /// <summary>
@@ -48,6 +60,35 @@ namespace MarsRobots.Entities
         /// </summary>
         /// <param name="pos"></param>
         /// <returns></returns>
+        //public PositionInfo GetPositionInfo(Position pos)
+        //{
+        //    PositionInfo posInfo = null;
+        //    try
+        //    {
+        //        if (this.IsPointInsideMap(pos))
+        //        {
+        //            if (!this.mapGrid.ContainsKey(pos.X))
+        //            {
+        //                Dictionary<int, PositionInfo> yComp = new Dictionary<int, PositionInfo>();
+        //                yComp.Add(pos.Y, new PositionInfo(pos));
+        //                this.mapGrid.Add(pos.X, yComp);
+        //            }
+        //            else if (!mapGrid[pos.X].ContainsKey(pos.Y))
+        //            {
+        //                mapGrid[pos.X].Add(pos.Y, new PositionInfo(pos));
+        //            }
+
+        //            return mapGrid[pos.X][pos.Y];
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+
+        //    return posInfo;
+        //}
+
         public PositionInfo GetPositionInfo(Position pos)
         {
             PositionInfo posInfo = null;
@@ -55,9 +96,9 @@ namespace MarsRobots.Entities
             {
                 if (this.IsPointInsideMap(pos))
                 {
-                    if (this.mapGrid[pos.X, pos.Y] == null)
-                        this.mapGrid[pos.X, pos.Y] = new PositionInfo(pos);
-                    posInfo = this.mapGrid[pos.X, pos.Y];
+                    if (this.grid[pos.X, pos.Y] == null)
+                        this.grid[pos.X, pos.Y] = new PositionInfo(pos);
+                    posInfo = this.grid[pos.X, pos.Y];
                 }
             }
             catch (Exception ex)

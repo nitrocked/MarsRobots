@@ -11,15 +11,24 @@ namespace MarsRobots
     {
         static void Main(string[] args)
         {
-            bool exit = false;
+
+            
             string userInput = string.Empty;
             Console.WriteLine("Hello Mars!");
             Console.WriteLine("");
             Console.WriteLine("");
-            Business.MarsRobotsHelper manager = new Business.MarsRobotsHelper();
+            RunConsole();
+        }
+
+
+        private static void RunConsole()
+        {
+            bool exit = false;
+            string userInput = string.Empty;
+            Business.MarsRobotsBusiness manager = new Business.MarsRobotsBusiness();
 
             // CONFIG MAP
-            Console.WriteLine("Enter Map Config Bound Params: X Y [Name]");
+            Console.WriteLine("Enter Map Config Bound Params: X Y ");
             userInput = Console.ReadLine();
             Position configMap = manager.ReadMapConfig(userInput);
 
@@ -29,45 +38,48 @@ namespace MarsRobots
                 userInput = Console.ReadLine();
                 configMap = manager.ReadMapConfig(userInput);
             }
-            MarsMap map = manager.CreateNewMap(configMap.X, configMap.Y);
+            MarsMap map = manager.CreateMap(configMap.X, configMap.Y);
 
             do
             {
                 // CONFIG ROBOT
-                Console.WriteLine("Enter Robot Config Params: X Y Orientation [Name]");
+                Console.WriteLine("Enter Robot Config Params: X Y Orientation ");
                 userInput = Console.ReadLine();
-                if (RequestExit(userInput)) 
+                if (exit = RequestExit(userInput))
                     return;
+                    
                 Position configRobot = manager.ReadRobotConfig(userInput);
 
                 while (configRobot == null)
                 {
                     Console.WriteLine(" ## Invalid Robot config string. Try again!");
                     userInput = Console.ReadLine();
-                    if (RequestExit(userInput)) 
+                    if (exit = RequestExit(userInput))
                         return;
                     configRobot = manager.ReadRobotConfig(userInput);
                 }
                 Console.WriteLine("Enter Robot Instructions String (L, R, F) :");
                 userInput = Console.ReadLine();
-                if (RequestExit(userInput)) 
+                if (exit = RequestExit(userInput))
                     return;
 
                 try
                 {
                     Robot robot = manager.CreateRobot(configRobot.X, configRobot.Y, configRobot.Direction, new System.Collections.Generic.List<string>() { userInput });
-                    
+
                     robot.SetMap(map);
                     manager.RunRobot(robot);
 
+                    Console.WriteLine();
                     Console.WriteLine($"OUTPUT {robot.CurrentPosition.X} {robot.CurrentPosition.Y} {robot.CurrentPosition.Direction.ToString()} {(robot.IsLost ? "LOST" : string.Empty)}");
+                    Console.WriteLine();
                     DrawMap(robot.CurrentMap);
                 }
-                catch(LostRobotException lrex)
+                catch (LostRobotException lrex)
                 {
                     Console.WriteLine(lrex.Message);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
                 }
