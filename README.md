@@ -58,24 +58,57 @@ In addition to the Console application, a REST service has been implemented in o
   - MarsMaps.Business: Business Core for MarsRobots.
   - MasrMasp.UnitTest: Some basic Unit Test based on MsTEst project.
 
+  #2.2 Features
+  -------------
+  - No-SQL peristence through LiteDB
+  > Note: MarsDB.db file is created
+  - In-CLI map draw
+
   #2.2 Running the solution
   -------------------------
-   2.2.a Running locally from Visual Studio
+   2.2.1 Download binaries release 
+   -------------------------------
+   - Download latest release from this repository releases.
+   > https://github.com/nitrocked/MarsRobots/releases/tag/v1.0.0-release
+   - Extract the files from zip.
+   - Execute MarsRobots.console.exe
+
+
+   2.2.2 Running locally from Visual Studio
    ----------------------------------------
    - Clone the repository https://github.com/nitrocked/MarsRobots.git
-   '''
-   git clone https://github.com/nitrocked/MarsRobots.git
-   '''
+   
+    ```sh
+    git clone https://github.com/nitrocked/MarsRobots.git
+    ```
+   
+   
    - Enter the folder and open MarsRobots.sln with Visual Studio
    - Hit 'Ctrl + F5' to build and run the application.
    
-   2.2.b Running from Docker
+   2.2.3 Running from Docker
    -------------------------
-   - Pull the docker image (theklint/marsrobotsconsole)
-   '''
-   docker pull theklint/marsrobotsconsole
-   '''
-   - Run it.
-   - Open CLI from running container.
+   > Switch docker
+   - Pull the docker image from theklint/marsrobotsconsole
+  
+   ```sh
+    docker pull theklint/marsrobotsconsole
+    ```
+   
+   - Run the image into a container.
+   
+   
+   ```sh
+    docker pull theklint/marsrobotsconsole
+    ```
+    
+   - Open CLI from running container
+    - Clicking on CLI icon from Docker Destop
+    or
+    - Executing from cli:
+    
+   ```sh
+    docker exec -it 8f6090dd4ee7 MarsRobots.Console.exe
+    ```
     
 
