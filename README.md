@@ -60,22 +60,22 @@ In addition to the Console application, a REST service has been implemented in o
 
   #2.2 Running the solution
   -------------------------
-    2.2.a Running locally from Visual Studio
-    ----------------------------------------
-    - Clone the repository https://github.com/nitrocked/MarsRobots.git
-    '''
-    git clone https://github.com/nitrocked/MarsRobots.git
-    '''
-    - Enter the folder and open MarsRobots.sln with Visual Studio
-    - Hit 'Ctrl + F5' to build and run the application.
-    
-    2.2.b Running from Docker
-    -------------------------
-    - Pull the docker image (theklint/marsrobotsconsole)
-    '''
-    docker pull theklint/marsrobotsconsole
-    '''
-    - Run it.
-    - Open CLI from running container.
+   2.2.a Running locally from Visual Studio
+   ----------------------------------------
+   - Clone the repository https://github.com/nitrocked/MarsRobots.git
+   '''
+   git clone https://github.com/nitrocked/MarsRobots.git
+   '''
+   - Enter the folder and open MarsRobots.sln with Visual Studio
+   - Hit 'Ctrl + F5' to build and run the application.
+   
+   2.2.b Running from Docker
+   -------------------------
+   - Pull the docker image (theklint/marsrobotsconsole)
+   '''
+   docker pull theklint/marsrobotsconsole
+   '''
+   - Run it.
+   - Open CLI from running container.
     
 
