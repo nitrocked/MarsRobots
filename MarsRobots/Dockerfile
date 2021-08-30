@@ -22,5 +22,5 @@ RUN dotnet publish "MarsRobots.Console.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
-COPY --from=publish /app/publish/bin/Release/netcoreapp3.1 .
+COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "MarsRobots.Console.dll"]
